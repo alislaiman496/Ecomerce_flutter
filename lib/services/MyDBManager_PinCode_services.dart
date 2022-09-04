@@ -21,7 +21,7 @@ class DBUserManagerPinCode {
 
   Future openDB() async {
     String databasesPath = await getDatabasesPath();
-    String dbPath = join(databasesPath, 'VerificationCode.db');
+    String dbPath = join(databasesPath, 'VerificationCodee.db');
 
     var database = await openDatabase(dbPath, version: 1, onCreate: populateDb);
     _datebase = database;
@@ -29,23 +29,23 @@ class DBUserManagerPinCode {
   }
 
   void populateDb(Database database, int version) async {
-    await database.execute("CREATE TABLE VerificationCode ("
+    await database.execute("CREATE TABLE VerificationCodee ("
+        "email TEXT PRIMARY KEY,"
         "vc_code INTEGER,"
         "gen_data TEXT,"
         "end_data TEXT,"
-        "email TEXT PRIMARY KEY,"
         "resendNumber INTEGER"
         ")");
   }
 
   Future<int?> insertVerificationCode(VerificationCode verificationCode) async {
     await openDB();
-    return await _datebase?.insert('VerificationCode', verificationCode.toMap());
+    return await _datebase?.insert('VerificationCodee', verificationCode.toMap());
   }
 
   Future<List<VerificationCode>> getVcList({int index=0}) async {
     await openDB();
-    final List<Map<String, dynamic>>? maps = await _datebase?.query('VerificationCode');
+    final List<Map<String, dynamic>>? maps = await _datebase?.query('VerificationCodee');
 
     return List.generate(maps!.length, (index) {
       return VerificationCode(
@@ -61,9 +61,9 @@ class DBUserManagerPinCode {
   }
   Future<UserRigester?> getOneVerificationCode(String email) async {
     var dbClient = await openDB();
-    var res = await dbClient.rawQuery('SELECT * FROM VerificationCode WHERE email = "$email"');
+    var res = await dbClient.rawQuery('SELECT * FROM VerificationCodee WHERE email = "$email"');
     print(res);
-    print("SELECT * FROM VerificationCode WHERE email = '$email'");
+    print("SELECT * FROM VerificationCodee WHERE email = '$email'");
     if (res.length > 0) {
       return  UserRigester.fromMap(res.first);
     }
@@ -73,21 +73,21 @@ class DBUserManagerPinCode {
   }
   Future<bool> isVerificationCode(String email) async {
     var dbClient = await openDB();
-    var res = await dbClient.rawQuery('SELECT * FROM VerificationCode WHERE email = "$email"');
+    var res = await dbClient.rawQuery('SELECT * FROM VerificationCodee WHERE email = "$email"');
 
-    print("SELECT * FROM VerificationCode WHERE email = '$email'");
+    print("SELECT * FROM VerificationCodee WHERE email = '$email'");
     return res!.isNotEmpty ? true : false;
   }
 
 
   Future<int?> updatePinCode(VerificationCode verificationCode) async {
     await openDB();
-    return await _datebase?.update('VerificationCode', verificationCode.toMap(),
+    return await _datebase?.update('VerificationCodee', verificationCode.toMap(),
         where: 'email=?', whereArgs: [verificationCode.email]);
   }
 
   Future<void> deletePinCode(String email) async {
     await openDB();
-    await _datebase?.delete("VerificationCode", where: "email = ? ", whereArgs: [email]);
+    await _datebase?.delete("VerificationCodee", where: "email = ? ", whereArgs: [email]);
   }
 }

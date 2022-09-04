@@ -5,7 +5,7 @@ class ProductData{
   late String description;
   late String category;
   late String image;
-  late Map rating;
+//  late Map rating;
 
   ProductData(
       { required this.id,
@@ -14,7 +14,8 @@ class ProductData{
         required this.description,
         required this.category,
         required this.image,
-        required this.rating});
+       // required this.rating
+      });
   void setId(int value){
     id=value;
   }
@@ -33,9 +34,9 @@ class ProductData{
   void setImage(String value){
     image=value;
   }
-  void setRating(Map value){
-    rating=value;
-  }
+  // void setRating(Map value){
+  //   rating=value;
+  // }
   Map<String, Object?> toMap() {
     return {
       'id': id,
@@ -44,7 +45,7 @@ class ProductData{
       'description': description,
       'category': category,
       'image': image,
-      'rating': rating,
+   //   'rating': rating,
     };
   }
 
@@ -55,6 +56,6 @@ class ProductData{
     description = (maps['description'] as String);
     category = (maps['category'] as String);
     image = (maps['image'] as String);
-    rating= (maps['rating'] as Map);
+   // rating= (maps['rating'] as Map);
   }
 }

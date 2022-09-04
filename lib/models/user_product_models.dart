@@ -4,7 +4,7 @@ class UserProduct extends ChangeNotifier{
 
   late String email;
   late int productId;
-  late int counter;
+
 
 
   UserProduct(
@@ -12,7 +12,7 @@ class UserProduct extends ChangeNotifier{
       {
         required this.email,
         required this.productId,
-        required this.counter,
+
         });
 
   void setProductId(int value){
@@ -24,7 +24,7 @@ class UserProduct extends ChangeNotifier{
     notifyListeners();
   }
   void setCounter(int value){
-    counter=value;
+
     notifyListeners();
   }
 
@@ -33,7 +33,6 @@ class UserProduct extends ChangeNotifier{
 
       'email': email,
       'productId': productId,
-      'counter': counter,
 
     };
   }
@@ -42,7 +41,7 @@ class UserProduct extends ChangeNotifier{
 
     email = (maps['email'] as String);
     productId = (maps['productId'] as int);
-    counter = (maps['counter'] as int);
+
 
   }
 }

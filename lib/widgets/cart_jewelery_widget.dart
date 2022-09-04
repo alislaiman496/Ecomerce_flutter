@@ -9,6 +9,7 @@ import 'package:xen_popup_card/xen_card.dart';
 import '../models/product_data_models.dart';
 import '../models/user_product_models.dart';
 import '../models/user_register_class_models.dart';
+import '../services/entry_users_product_database_services.dart';
 import '../services/product_database_services.dart';
 
 
@@ -29,6 +30,7 @@ class _CartJeweleryWidgetState extends State<CartJeweleryWidget> {
   // GUTTER
   //
   // [XenCardGutter]
+  final DBUserProduct dbUserProduct = DBUserProduct();
   XenCardGutter gutter = const XenCardGutter(
 
     child: Padding(
@@ -90,12 +92,22 @@ late List<UserProduct> lst=[];
                     backgroundImage:    NetworkImage(widget.jeweleryData.image),
                   ),
                   title: AutoSizeText("Title : ${widget.jeweleryData.title.toUpperCase()}"),
-                  subtitle: AutoSizeText("Price : ${widget.jeweleryData.price.toString()} \$",style: const TextStyle(backgroundColor: Colors.indigo,fontWeight: FontWeight.w900,fontSize: 15)),),
+                  subtitle: AutoSizeText("Price : ${widget.jeweleryData.price.toString()} \$",style:  TextStyle(backgroundColor: Colors.indigo,fontWeight: FontWeight.w900,fontSize: 15)),),
               ),
               ElevatedButton(onPressed: () async {
 
-                var x= await up.getOneProductData(widget.jeweleryData.id);
-                Provider.of<ListProduct>(context,listen: false).pd.add(x!);
+                UserProduct up =UserProduct(
+                  email:  Provider.of<UserRigester>(context, listen: false).emailAdress,
+                  productId:  widget.jeweleryData.id,
+                );
+
+
+                dbUserProduct.insertUserProduct(up).then((value) => {
+
+                  print("Student Data Add to database $value"),
+                });
+
+
               },style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

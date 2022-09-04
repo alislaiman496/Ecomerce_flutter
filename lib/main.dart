@@ -61,7 +61,7 @@ void main() {
           create: (_) => UserProduct(
               email: '',
             productId: 0,
-            counter: 0,
+
               )),
       ChangeNotifierProvider<ListProduct>(
           create: (_) => ListProduct(

@@ -216,9 +216,9 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                                           : dBUserManagerPinCode
                                           .insertVerificationCode(vc)
                                           .then((value) {});
-                                      dBUserManagerPinCode
-                                          .insertVerificationCode(vc)
-                                          .then((value) {});
+                                      // dBUserManagerPinCode
+                                      //     .insertVerificationCode(vc)
+                                      //     .then((value) {});
                                       print(context
                                           .read<SharedPreferenceModels>()
                                           .newPass);

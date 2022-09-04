@@ -15,7 +15,10 @@ import 'package:provider/provider.dart';
 
 import '../generated/l10n.dart';
 import '../models/product_data_models.dart';
+import '../models/user_product_models.dart';
 import '../services/MyDBManager_services.dart';
+import '../services/entry_users_product_database_services.dart';
+import '../services/product_database_services.dart';
 import '../utils/theme_helper_utils.dart';
 import '../widgets/cart_jewelery_widget.dart';
 import '../widgets/header_widget.dart';
@@ -34,18 +37,38 @@ class ProductBuyScreen extends StatefulWidget {
 class _ProductBuyScreenState extends State<ProductBuyScreen> {
   ScrollController scrollController=ScrollController();
   final DBUserManager dbUserManager = DBUserManager();
+  final DBUserManagerProduct dbUserManagerProduct = DBUserManagerProduct();
   final formKey = GlobalKey<FormState>();
   final double _headerHeight = 250;
   bool valid=false;
+  bool done = false;
+  List  data=[];
   double  _drawerIconSize = 24;
   double _drawerFontSize = 17;
   var userList;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-
+  final DBUserProduct dbUserProduct = DBUserProduct();
+  Future <List>getRes() async {
+    print(Provider.of<UserRigester>(context, listen: false).emailAdress);
+    var res = await dbUserProduct
+        .getOneUserProduct( Provider.of<UserRigester>(context, listen: false).emailAdress);
+    var userProducts=[];
+    for (int i=0;i<res.length;i++)
+    {  userProducts.add(UserRigester.fromMap(res[i])) ;}
+    //return userProducts;
+    var prod=[];
+    for (int i=0;i<userProducts.length;i++){
+      var s=await dbUserManagerProduct.getOneProductData(userProducts[i].productId);
+      prod.add(s);
+    }
+    print (prod[1].id);
+    return prod;
+  }
   @override
   Widget build(BuildContext context) {
+
     double width=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -188,19 +211,60 @@ class _ProductBuyScreenState extends State<ProductBuyScreen> {
         ),
       ),
       backgroundColor: Colors.white54,
-      body: Center(
-        child:ListView.builder(
-          controller:scrollController ,
-          itemCount: Provider.of<ListProduct>(context,listen: false).pd.length,
-          itemBuilder: (BuildContext context,int index){
-            Set<ProductData> pd1=Provider.of<ListProduct>(context,listen: false).pd ;
-            List lst =pd1.toList();
-            ProductData pq=lst[index];
-          return  CartJeweleryWidget(jeweleryData:pq );
+      body: FutureBuilder(
+        future: getRes(),
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
 
-          },
+          if (snapshot.hasError) {
+          } else {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
 
-        ),
+                break;
+              case ConnectionState.done:
+                done =true;
+                print(data[0].id);
+                data=snapshot.data!;
+
+
+                break;
+              case ConnectionState.none:
+              // TODO: Handle this case.
+                break;
+              case ConnectionState.active:
+              // TODO: Handle this case.
+                break;
+            }
+          }
+          if (done) {
+            return ListView.builder(
+              controller:scrollController ,
+              itemCount: data.length,
+              itemBuilder: (BuildContext context,int index){
+
+                return CartJeweleryWidget(jeweleryData: ProductData.fromMap(data[index]));
+
+              },
+
+            );
+
+
+
+          }
+          else {
+            return  Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: const [
+
+                  CircularProgressIndicator(),
+                ],
+              ),
+
+            );
+          }
+        }
       ),
 
     );

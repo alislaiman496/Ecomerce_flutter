@@ -52,6 +52,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     double width=MediaQuery.of(context).size.width;
+    double high=MediaQuery.of(context).size.height;
          return Scaffold(
            appBar: AppBar(
              title: AutoSizeText(S.of(context).productPage,
@@ -210,14 +211,14 @@ class _ProductScreenState extends State<ProductScreen> {
              ),
              child: SafeArea(
                child: Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                 padding:  EdgeInsets.symmetric(horizontal: 0.015*high, vertical: 0.01*width),
                  child: GNav(
                    rippleColor: Colors.grey[300]!,
                    hoverColor: Colors.grey[100]!,
-                   gap: 8,
+                   gap: 0.01*width,
                    activeColor: Colors.black,
-                   iconSize: 24,
-                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                   iconSize: 0.05*width,
+                   padding: EdgeInsets.symmetric(horizontal:0.02*width, vertical:0.01*width),
                    duration: Duration(milliseconds: 400),
                    tabBackgroundColor: Colors.grey[100]!,
                    color: Colors.black,
@@ -227,20 +228,23 @@ class _ProductScreenState extends State<ProductScreen> {
 
                        icon: MdiIcons.diamondStone,
                        text: S.of(context).jewelery,
+                       textSize: 0.01*width,
 
                      ),
                      GButton(
                        icon:MdiIcons.chip ,
                        text: S.of(context).electronics,
+                       textSize: 0.01*width,
                      ),
                      GButton(
-
+                       textSize: 0.01*width,
                        icon: MdiIcons.humanMale,
                        text: S.of(context).mensClothing,
                      ),
                      GButton(
                        icon: MdiIcons.humanFemale,
                        text: S.of(context).womensClothing,
+                       textSize: 0.01*width,
                      ),
                    ],
                    selectedIndex: _selectedIndex,
